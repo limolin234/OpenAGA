@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+*.aux
+*.fls
+*.fdb_latexmk
+*.log
+*.out
+*.synctex.gz
+*.xdv
+drafts/*.pdf
+!drafts/README.md
+tmp/
+*.tmp
+.~lock.*
