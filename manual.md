@@ -1,31 +1,40 @@
-# Manual
+# 人工手稿
 
-Human-maintained project line.
+> 本文件由人维护。Agent 默认只读，不在这里维护第二份 AI 版本。
 
-Use this file for the content that requires human judgment:
+## 项目论点
 
-- project goal
-- audience and expected output
-- main argument or route
-- non-negotiable details
-- doubts and open decisions
-- stop conditions
+待填写。
 
-Agent output should not overwrite this file's role. If the agent has a better
-structure, it should propose it in `manual_agent.md` for human review.
+## 全文主线
 
-## Current Project Line
+待填写。
 
-Write the project line here.
+## 模块结构
 
-## Important Details
+| 模块 | 作用 | 人工手稿路径 | 输入 | 输出 | 状态 |
+| --- | --- | --- | --- | --- | --- |
+| 待填写 | 待填写 | `modules/<模块>/manual.md` | 待填写 | 待填写 | 待填写 |
 
-- TBD
+## 跨模块关系
 
-## Open Questions
+记录模块之间必须统一的术语、物理量、单位、参考面、证据和结论依赖。
 
-- TBD
+待填写。
 
-## Stop Conditions
+## 不可丢失内容
 
-- TBD
+- 待填写。
+
+## 未决问题
+
+- 待填写。
+
+## 正文与附录
+
+- 正文：待填写。
+- 附录：待填写。
+
+## 人工停止条件
+
+- 待填写。

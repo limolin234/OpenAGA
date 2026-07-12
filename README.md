@@ -1,118 +1,128 @@
-# Research Project Template
+# 研究项目模板
 
-Minimal infrastructure for agent-assisted research projects.
+这是一个遵循 KISS 原则的人机协作研究模板。模板只规定必要的文件职责，不预建空的数据、脚本、图片或模块目录。
 
-The template starts small on purpose. It provides a stable place for human
-judgment, agent expansion, project status, workflow rules, and research notes.
-Add data, scripts, figures, claim ledgers, or graphs only when the project
-actually needs them.
+## 核心分工
 
-Important claims should have a visible verification path: source candidate,
-research note, original-source reading, confidence level, and final prose
-decision.
+- `workflow.md`：人维护的最高项目约束，完整记录多轮讨论后确定的工作流程、范围、质量要求和停止条件。
+- `manual.md`：人维护的全文骨架，规定文章主线、章节顺序和跨模块关系。
+- `modules/<模块>/manual.md`：人维护的模块内容。模块存在真实工作时再创建。
+- `AGENT.md`：agent 维护的执行说明，只能派生自 `workflow.md` 和各级 `manual.md`，不能增加人的要求。
+- `docs_graph/`：agent 维护的项目导航、状态和交接信息。
+- `project_points/`：agent 维护的项目笔记与关系图，保存短技术点、证据状态、模型假设、否定结果和决策关系。
+- 最终报告、检索记录、数据、脚本和图片：agent 执行并维护，人负责验收。
 
-The files form a human-in-the-loop control loop: `manual.md` holds the human
-line, `workflow.md` stores durable corrections, `AGENT.md` stores future
-startup context, `docs_graph/` stores stage status and local project memory,
-and `research_notes/` stores evidence state.
+Agent 不在人工手稿旁维护第二份竞争性结构。对人工手稿的理解先在讨论中确认；执行计划进入 `docs_graph/status.md`，技术依据进入 `project_points/`，正式表达进入最终报告。
 
-## Structure
+## 权威顺序
+
+发生冲突时按照以下顺序处理：
+
+```text
+用户当前明确指令
+> workflow.md
+> 根目录 manual.md
+> 模块 manual.md
+> 已核验的原始证据和可复现数据
+> AGENT.md
+> docs_graph/status.md
+> agent 推断
+```
+
+根目录与模块 `manual.md` 出现冲突时，agent 停止相关写作并向人说明，不自行选择。
+
+## 推荐结构
 
 ```text
 .
-├── AGENT.md
 ├── README.md
 ├── workflow.md
 ├── manual.md
-├── manual_agent.md
+├── AGENT.md
 ├── docs_graph/
-│   ├── docs_graph.md
+│   ├── skill.md
 │   └── status.md
-└── research_notes/
-    └── research_notes.md
+└── project_points/
+    ├── README.md
+    ├── skill.md
+    ├── graph.py
+    ├── nodes.jsonl
+    ├── edges.jsonl
+    └── index/
+        └── README.md
 ```
 
-## Roles
+真实工作出现后再增加：
 
-- `manual.md`: human-maintained project line, judgment, doubts, and stop
-  conditions.
-- `manual_agent.md`: AI-completed version of `manual.md`, for human review,
-  selection, and possible merge-back.
-- Do not co-author the same high-level file in parallel. Keep the human-owned
-  line in `manual.md`; put agent completion in `manual_agent.md`.
-- `workflow.md`: durable rules for human-agent collaboration.
-- `AGENT.md`: project-level agent instruction/startup note, written by AI after
-  the human states what the agent should remember. It is separate from the
-  manuscript layer, so it does not conflict with `manual.md` or
-  `manual_agent.md`.
-- `docs_graph/`: self-contained project map, usage guide, and
-  commit-to-commit status. It does not require an external docs-graph tool.
-- `research_notes/`: sources, technical points, evidence notes, open questions,
-  and negative results.
+```text
+modules/<模块>/manual.md   # 人写的模块内容
+sources/                  # 原始论文、标准和来源记录
+data/                     # 输入数据和生成表格
+scripts/                  # 可复现命令和程序
+figures/                  # 有来源或脚本的图片
+writing/                  # 正式稿和编译产物
+```
 
-## Built-in Docs Graph
+## 协作模式
 
-The `docs_graph/` folder is a small Markdown tree inside the project. It is
-not a separate database and does not depend on a preinstalled skill. Use it as
-path-addressable project memory:
+### 讨论模式
 
-- `docs_graph/docs_graph.md` explains how the local docs graph should be used.
-- `docs_graph/status.md` records the current stage, last human decision,
-  active task, evidence state, risks, next actions, and handoff notes.
-- Add more files under `docs_graph/` only when a project area needs its own
-  stable navigation or handoff note.
-- Update `docs_graph/status.md` before stable commits and after major changes
-  in direction.
+用户说“先讨论”“只看”“不要修改”时立即进入只读模式。Agent 可以读取文件、指出定义冲突和提出选项，但不编辑、不提交，也不启动会写入项目的生成程序。
 
-## Upgrade Path
+### 定稿模式
 
-Keep the default tree lightweight. Add folders only when they have work to do:
+把讨论结果分成：已接受、已否决、暂定假设、仍未确定、正文内容和附录内容。数学对象、概率事件、单位、坐标系、参考面和证据边界在这里确定。
 
-- Add `data/` when the project has datasets or generated tables.
-- Add `scripts/` when commands need to be reproducible.
-- Add `figures/` when generated figures need provenance.
-- Split `research_notes/` into multiple files when one file becomes hard to
-  scan.
-- Add a claim ledger when the project contains many auditable factual or
-  causal claims.
-- Generate a graph only as a derived view from notes or ledgers, not as the
-  default source of truth.
+### 执行模式
 
-## First Use
+只有用户明确要求执行后，agent 才修改文件、调研、计算、编译和渲染。只读审计可在讨论模式或执行验收阶段进行。Git 提交是独立操作，执行授权不自动包含提交；用户当前指令或 `workflow.md` 必须明确要求提交。
 
-Use this checklist when starting a new project from the template:
+## 人工手稿用法
 
-1. Create a new repository from the template, or copy the directory into a new
-   project location.
-2. Rename the project in this README and remove template-only wording that no
-   longer applies.
-3. Decide whether to keep the MIT license or replace it with the target
-   project's license and copyright owner.
-4. Set the Git remote to the new project repository, or remove the template
-   remote before committing.
-5. Reset `docs_graph/status.md` for the new project: fill the project name,
-   stage, last human decision, active task, evidence state, risks, next
-   actions, and handoff notes.
-6. Fill `manual.md` with the human-owned project line: goal, audience, output,
-   non-negotiable details, doubts, and stop conditions.
-7. Ask the agent to complete `manual_agent.md` from `manual.md`. The agent may
-   expand structure and checks, but should not overwrite `manual.md`.
-8. Add real source candidates, technical points, open questions, and negative
-   results to `research_notes/research_notes.md`. Do not keep placeholder rows
-   as project evidence.
-9. If the agent tool expects a different startup filename, add a short pointer
-   file such as `AGENTS.md` or `CLAUDE.md` that tells it to read `AGENT.md` and
-   `workflow.md`.
-10. Make the first stable commit after `manual.md`, `manual_agent.md`,
-    `docs_graph/status.md`, and `research_notes/research_notes.md` describe
-    the new project rather than this template.
+根目录 `manual.md` 只描述全文主线和模块关系。具体内容写入对应模块的 `manual.md`：
 
-## Readiness
+```text
+modules/
+├── background/manual.md
+├── physical_model/manual.md
+├── manufacturing/manual.md
+└── comparison/manual.md
+```
 
-This template is usable as a lightweight starting point for research reports,
-literature reviews, feasibility studies, and small experimental projects. The
-main required discipline is initialization: do not treat template placeholders
-or template status as project facts.
+模块名按项目实际内容确定，不要求使用上面的示例。Agent 默认只读人工 `manual.md`；需要改动时必须由用户明确授权。
 
-For larger projects, add claim ledgers, data folders, scripts, figures, or a
-derived graph only after the default files are no longer enough.
+## Project Points 用法
+
+模板使用现有 `project_points` 实现管理项目笔记。它采用 JSONL 作为事实源，不依赖数据库、MCP 或 embedding。
+
+常用命令：
+
+```bash
+python3 project_points/graph.py search "关键词"
+python3 project_points/graph.py add "技术点" --kind claim --tags topic --evidence pending
+python3 project_points/graph.py link P0001 P0002 --relation depends_on --note "依赖原因"
+python3 project_points/graph.py node P0001
+python3 project_points/graph.py neighborhood P0001
+```
+
+写入前先搜索，避免重复节点。节点保持简短；长推导、论文摘录、图片和数据放到对应项目文件中，再用 `source_hint` 或 `note` 指向它们。
+
+## 初始化步骤
+
+1. 修改项目名称、许可证和 Git remote。
+2. 由人填写 `workflow.md` 的项目目标、范围、流程、交付物和停止条件。
+3. 由人填写根 `manual.md`；存在具体模块时再创建模块 `manual.md`。
+4. 由 agent 根据上述人工文件更新 `AGENT.md`，只写执行方式和导航。
+5. 清空模板的 `project_points/nodes.jsonl` 与 `edges.jsonl`，再写入真实项目点。
+6. 填写 `docs_graph/status.md`，确认当前模式和下一步。
+7. 完成首次稳定提交。
+
+项目合同、完整流程、根 `manual.md` 主线和当前任务仍为占位内容时，不开始实质研究或写作；用户明确限定的小型初始化任务除外。
+
+## 完成标准
+
+- 人工要求只存在于 `workflow.md` 和各级 `manual.md`，没有第二份 AI 手稿与其竞争。
+- 关键事实可回到论文、标准、官方规格、源代码或原始数据本身；搜索平台只用于发现来源。
+- 正文只呈现确定后的论证，搜索、纠错和 agent 思考过程留在项目记录中。
+- 模型明确变量、单位、参考面、一般形式、近似条件、证据和复现方法。
+- docs graph、project points、生成物与 Git 提交保持同步。

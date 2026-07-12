@@ -31,6 +31,7 @@ temp/
 *.vrb
 *.xdv
 
-# Local research snapshots and generated heavy artifacts
-research_notes/snapshots/
+# Derived caches and heavy generated views
 derived_graph/
+project_points/index/*
+!project_points/index/README.md
